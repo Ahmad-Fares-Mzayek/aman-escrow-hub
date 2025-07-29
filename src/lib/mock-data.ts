@@ -52,10 +52,46 @@ const mockUsers: User[] = [
     totalReceived: 3500.00,
     memberSince: '2024-01-15',
     isOnboarded: false
+  },
+  {
+    id: 'usr_002',
+    sellerId: 'S12345',
+    name: 'Nour Boutique',
+    email: 'nour@boutique.com',
+    totalSpent: 0,
+    totalReceived: 8750.00,
+    memberSince: '2024-02-10',
+    isOnboarded: true
+  },
+  {
+    id: 'usr_003',
+    sellerId: 'S54321',
+    name: 'Al Hijaz Crafts',
+    email: 'contact@alhijaz.com',
+    totalSpent: 0,
+    totalReceived: 4200.00,
+    memberSince: '2024-03-05',
+    isOnboarded: true
   }
 ];
 
 const mockProducts: Product[] = [
+  {
+    id: 'P0001',
+    sellerId: 'S12345',
+    name: 'Handmade Abaya',
+    price: 250.00,
+    description: 'Beautiful handcrafted abaya with intricate embroidery',
+    createdAt: '2024-07-15'
+  },
+  {
+    id: 'P0002',
+    sellerId: 'S54321',
+    name: 'Desert-Inspired Jewelry Set',
+    price: 180.00,
+    description: 'Elegant jewelry set inspired by desert themes',
+    createdAt: '2024-07-20'
+  },
   {
     id: 'PRD_001',
     sellerId: 'SLR_001',
@@ -86,17 +122,29 @@ const mockTransactions: Transaction[] = [
   {
     id: 'TXN_001',
     buyerId: 'usr_001',
-    sellerId: 'SLR_002',
-    sellerName: 'فاطمة علي',
-    productId: 'PRD_003',
-    productName: 'Samsung Galaxy S24',
-    productPrice: 3200.00,
+    sellerId: 'S12345',
+    sellerName: 'Nour Boutique',
+    productId: 'P0001',
+    productName: 'Handmade Abaya',
+    productPrice: 250.00,
     status: 'pending',
     createdAt: '2024-07-25',
     type: 'outgoing'
   },
   {
     id: 'TXN_002',
+    buyerId: 'usr_001',
+    sellerId: 'S54321',
+    sellerName: 'Al Hijaz Crafts',
+    productId: 'P0002',
+    productName: 'Desert-Inspired Jewelry Set',
+    productPrice: 180.00,
+    status: 'confirmed',
+    createdAt: '2024-07-24',
+    type: 'outgoing'
+  },
+  {
+    id: 'TXN_003',
     buyerId: 'usr_002',
     sellerId: 'SLR_001',
     sellerName: 'أحمد محمد',
@@ -108,7 +156,7 @@ const mockTransactions: Transaction[] = [
     type: 'incoming'
   },
   {
-    id: 'TXN_003',
+    id: 'TXN_004',
     buyerId: 'usr_003',
     sellerId: 'SLR_001',
     sellerName: 'أحمد محمد',

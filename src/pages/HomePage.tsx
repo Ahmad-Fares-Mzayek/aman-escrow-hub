@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
+import { AuthModal } from '@/components/auth/AuthModal';
 import { usePlatformStats, formatNumber, formatCurrency } from '@/lib/mock-data';
+import { useTranslation } from 'react-i18next';
 import { 
   Shield, 
   Users, 
@@ -12,12 +14,17 @@ import {
   ArrowRight,
   CheckCircle,
   Clock,
-  Lock
+  Lock,
+  Lightbulb
 } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 export const HomePage: React.FC = () => {
   const { user } = useAuth();
   const stats = usePlatformStats();
+  const { t } = useTranslation();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
 
   if (user) {
     return <Dashboard />;
@@ -33,27 +40,35 @@ export const HomePage: React.FC = () => {
               <Shield className="h-20 w-20 text-primary animate-float" />
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-gradient-trust">
-              AMN | أمن
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-gradient-trust min-h-[90px] md:min-h-[108px] lg:min-h-[126px] flex items-center justify-center">
+              {t('home.hero.title')}
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed">
-              Your trusted intermediary for secure individual-to-individual transactions
+              {t('home.hero.subtitle')}
             </p>
             
             <p className="text-lg text-foreground/80 mb-12 max-w-2xl mx-auto">
-              Supporting small local businesses and boutiques in KSA through our escrow-style platform. 
-              Buy and sell with confidence, knowing your transactions are protected.
+              {t('home.hero.description')}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="trust-gradient hover:opacity-90 text-lg px-8 py-4">
+              <Button 
+                size="lg" 
+                className="trust-gradient hover:opacity-90 text-lg px-8 py-4"
+                onClick={() => {
+                  setAuthMode('signin');
+                  setShowAuthModal(true);
+                }}
+              >
                 <Shield className="mr-2 h-5 w-5" />
-                Get Started
+                {t('home.hero.getStarted')}
               </Button>
-              <Button variant="outline" size="lg" className="text-lg px-8 py-4">
-                Learn More
-                <ArrowRight className="ml-2 h-5 w-5" />
+              <Button asChild variant="outline" size="lg" className="text-lg px-8 py-4">
+                <Link to="/learn-more">
+                  {t('home.hero.learnMore')}
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
               </Button>
             </div>
           </div>
@@ -64,7 +79,7 @@ export const HomePage: React.FC = () => {
       <section className="py-16 px-6 bg-muted/50">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">
-            Trusted by Thousands
+            {t('home.stats.title')}
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -76,8 +91,8 @@ export const HomePage: React.FC = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-muted-foreground">Active Users</p>
-                <p className="text-sm text-success mt-1">+24 this hour</p>
+                <p className="text-muted-foreground">{t('home.stats.activeUsers')}</p>
+                <p className="text-sm text-success mt-1">+24 {t('home.stats.thisHour')}</p>
               </CardContent>
             </Card>
 
@@ -89,8 +104,8 @@ export const HomePage: React.FC = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-muted-foreground">Completed Transactions</p>
-                <p className="text-sm text-success mt-1">+12 this hour</p>
+                <p className="text-muted-foreground">{t('home.stats.completedTransactions')}</p>
+                <p className="text-sm text-success mt-1">+12 {t('home.stats.thisHour')}</p>
               </CardContent>
             </Card>
 
@@ -102,8 +117,8 @@ export const HomePage: React.FC = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-muted-foreground">Total Volume Secured</p>
-                <p className="text-sm text-success mt-1">+SAR 45K today</p>
+                <p className="text-muted-foreground">{t('home.stats.totalVolumeSecured')}</p>
+                <p className="text-sm text-success mt-1">+SAR 45K {t('home.stats.today')}</p>
               </CardContent>
             </Card>
           </div>
@@ -114,7 +129,7 @@ export const HomePage: React.FC = () => {
       <section className="py-20 px-6">
         <div className="container mx-auto">
           <h2 className="text-4xl font-bold text-center mb-16">
-            How AMN Protects Your Transactions
+            {t('home.howItWorks.title')}
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
@@ -122,9 +137,9 @@ export const HomePage: React.FC = () => {
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Lock className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-4">1. Secure Escrow</h3>
+              <h3 className="text-xl font-semibold mb-4">{t('home.howItWorks.step1.title')}</h3>
               <p className="text-muted-foreground">
-                Buyer's payment is held securely until the seller delivers the product and buyer confirms receipt.
+                {t('home.howItWorks.step1.description')}
               </p>
             </div>
 
@@ -132,9 +147,9 @@ export const HomePage: React.FC = () => {
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Clock className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-4">2. Safe Delivery</h3>
+              <h3 className="text-xl font-semibold mb-4">{t('home.howItWorks.step2.title')}</h3>
               <p className="text-muted-foreground">
-                Both parties are protected during the transaction. Sellers ship with confidence, buyers receive what they ordered.
+                {t('home.howItWorks.step2.description')}
               </p>
             </div>
 
@@ -142,9 +157,9 @@ export const HomePage: React.FC = () => {
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <CheckCircle className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-4">3. Instant Release</h3>
+              <h3 className="text-xl font-semibold mb-4">{t('home.howItWorks.step3.title')}</h3>
               <p className="text-muted-foreground">
-                Once buyer confirms receipt, payment is instantly released to the seller. Disputes are handled fairly by our team.
+                {t('home.howItWorks.step3.description')}
               </p>
             </div>
           </div>
@@ -155,17 +170,31 @@ export const HomePage: React.FC = () => {
       <section className="py-20 px-6 bg-primary text-primary-foreground">
         <div className="container mx-auto text-center">
           <h2 className="text-4xl font-bold mb-6">
-            Ready to Start Trading Safely?
+            {t('home.cta.title')}
           </h2>
           <p className="text-xl mb-8 opacity-90">
-            Join thousands of satisfied users who trust AMN with their transactions
+            {t('home.cta.subtitle')}
           </p>
-          <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
+          <Button 
+            size="lg" 
+            variant="secondary" 
+            className="text-lg px-8 py-4"
+            onClick={() => {
+              setAuthMode('signup');
+              setShowAuthModal(true);
+            }}
+          >
             <Shield className="mr-2 h-5 w-5" />
-            Create Free Account
+            {t('home.cta.createAccount')}
           </Button>
         </div>
       </section>
+
+      <AuthModal 
+        isOpen={showAuthModal} 
+        onClose={() => setShowAuthModal(false)}
+        defaultMode={authMode}
+      />
     </div>
   );
 };
@@ -173,18 +202,34 @@ export const HomePage: React.FC = () => {
 // Dashboard component for authenticated users
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   
   if (!user) return null;
+
+  // Mock chart data
+  const monthlySpendingData = [
+    { date: 'Jul 1', amount: 150 },
+    { date: 'Jul 3', amount: 250 },
+    { date: 'Jul 8', amount: 0 },
+    { date: 'Jul 15', amount: 500 },
+    { date: 'Jul 22', amount: 120 }
+  ];
+
+  const transactionTypeData = [
+    { name: t('dashboard.buying'), value: 60, color: '#3b82f6' },
+    { name: t('dashboard.selling'), value: 25, color: '#10b981' },
+    { name: t('dashboard.pending'), value: 15, color: '#f59e0b' }
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 p-6">
       <div className="container mx-auto">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">
-            Welcome back, {user.name}
+            {t('dashboard.welcome')}, {user.name}
           </h1>
           <p className="text-muted-foreground text-lg">
-            Here's your transaction overview
+            {t('dashboard.overview')}
           </p>
         </div>
 
@@ -193,7 +238,7 @@ const Dashboard: React.FC = () => {
           <Card className="hover-lift">
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
-                Total Spent
+                {t('dashboard.totalSpent')}
                 <TrendingUp className="h-5 w-5 text-muted-foreground" />
               </CardTitle>
             </CardHeader>
@@ -202,7 +247,7 @@ const Dashboard: React.FC = () => {
                 {formatCurrency(user.totalSpent)}
               </p>
               <p className="text-sm text-muted-foreground mt-1">
-                Across all purchases
+                {t('dashboard.acrossPurchases')}
               </p>
             </CardContent>
           </Card>
@@ -210,7 +255,7 @@ const Dashboard: React.FC = () => {
           <Card className="hover-lift">
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
-                Total Received
+                {t('dashboard.totalReceived')}
                 <Banknote className="h-5 w-5 text-muted-foreground" />
               </CardTitle>
             </CardHeader>
@@ -219,7 +264,7 @@ const Dashboard: React.FC = () => {
                 {formatCurrency(user.totalReceived)}
               </p>
               <p className="text-sm text-muted-foreground mt-1">
-                From sales
+                {t('dashboard.fromSales')}
               </p>
             </CardContent>
           </Card>
@@ -227,7 +272,7 @@ const Dashboard: React.FC = () => {
           <Card className="hover-lift">
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
-                Your Seller ID
+                {t('dashboard.yourSellerId')}
                 <Shield className="h-5 w-5 text-muted-foreground" />
               </CardTitle>
             </CardHeader>
@@ -236,11 +281,72 @@ const Dashboard: React.FC = () => {
                 {user.sellerId}
               </p>
               <p className="text-sm text-muted-foreground mt-1">
-                Share with buyers
+                {t('dashboard.shareWithBuyers')}
               </p>
             </CardContent>
           </Card>
         </div>
+
+        {/* Charts and Analytics */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <Card className="hover-lift">
+            <CardHeader>
+              <CardTitle>{t('dashboard.monthlySpending')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={250}>
+                <LineChart data={monthlySpendingData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="amount" stroke="#3b82f6" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          <Card className="hover-lift">
+            <CardHeader>
+              <CardTitle>{t('dashboard.transactionTypes')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={transactionTypeData}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                    label={({ name, value }) => `${name}: ${value}%`}
+                  >
+                    {transactionTypeData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* AI Tip */}
+        <Card className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-800">
+          <CardHeader>
+            <CardTitle className="flex items-center text-blue-800 dark:text-blue-200">
+              <Lightbulb className="mr-2 h-5 w-5" />
+              {t('dashboard.aiTip')}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-blue-700 dark:text-blue-300">
+              {t('dashboard.aiTipContent')}
+            </p>
+          </CardContent>
+        </Card>
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

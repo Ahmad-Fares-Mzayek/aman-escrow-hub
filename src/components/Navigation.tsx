@@ -11,19 +11,24 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthModal } from '@/components/auth/AuthModal';
+import { LanguageToggle } from '@/components/LanguageToggle';
 import { Moon, Sun, Settings, LogOut, BookOpen, ShoppingCart, DollarSign, User, Shield } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { useTranslation } from 'react-i18next';
 
 export const Navigation: React.FC = () => {
   const { user, signOut } = useAuth();
   const location = useLocation();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
   const { theme, setTheme } = useTheme();
+  const { t } = useTranslation();
 
   const isActive = (path: string) => location.pathname === path;
 
-  const handleAuthClick = () => {
+  const handleAuthClick = (mode: 'signin' | 'signup' = 'signin') => {
     if (!user) {
+      setAuthMode(mode);
       setShowAuthModal(true);
     }
   };
@@ -54,7 +59,7 @@ export const Navigation: React.FC = () => {
                   }`}
                 >
                   <ShoppingCart className="h-4 w-4" />
-                  <span>Buy</span>
+                   <span>{t('nav.buy')}</span>
                 </Link>
                 <Link 
                   to="/sell" 
@@ -65,7 +70,7 @@ export const Navigation: React.FC = () => {
                   }`}
                 >
                   <DollarSign className="h-4 w-4" />
-                  <span>Sell</span>
+                   <span>{t('nav.sell')}</span>
                 </Link>
                 <Link 
                   to="/payments" 
@@ -76,7 +81,7 @@ export const Navigation: React.FC = () => {
                   }`}
                 >
                   <DollarSign className="h-4 w-4" />
-                  <span>Payments</span>
+                   <span>{t('nav.payments')}</span>
                 </Link>
               </>
             )}
@@ -84,6 +89,9 @@ export const Navigation: React.FC = () => {
 
           {/* Right side actions */}
           <div className="flex items-center space-x-4">
+            {/* Language toggle */}
+            <LanguageToggle />
+            
             {/* Theme toggle */}
             <Button
               variant="ghost"
@@ -120,18 +128,18 @@ export const Navigation: React.FC = () => {
                   <DropdownMenuItem asChild>
                     <Link to="/dashboard" className="flex items-center">
                       <User className="mr-2 h-4 w-4" />
-                      <span>Dashboard</span>
+                      <span>{t('nav.dashboard')}</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Settings className="mr-2 h-4 w-4" />
-                    <span>Account Settings</span>
+                    <span>{t('nav.accountSettings')}</span>
                   </DropdownMenuItem>
                   {!user.isOnboarded && (
                     <DropdownMenuItem asChild>
                       <Link to="/tutorial">
                         <BookOpen className="mr-2 h-4 w-4" />
-                        <span>Tutorial</span>
+                        <span>{t('nav.tutorial')}</span>
                       </Link>
                     </DropdownMenuItem>
                   )}
@@ -141,25 +149,25 @@ export const Navigation: React.FC = () => {
                     onClick={signOut}
                   >
                     <LogOut className="mr-2 h-4 w-4" />
-                    <span>Sign out</span>
+                    <span>{t('nav.signOut')}</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <div className="flex items-center space-x-2">
-                <Button 
+                 <Button 
                   variant="ghost" 
-                  onClick={handleAuthClick}
+                  onClick={() => handleAuthClick('signin')}
                   className="hidden sm:inline-flex"
                 >
-                  Sign In
+                  {t('nav.signIn')}
                 </Button>
-                <Button 
-                  onClick={handleAuthClick}
+                 <Button 
+                  onClick={() => handleAuthClick('signin')}
                   className="bg-primary hover:bg-primary-light"
                 >
                   <ShoppingCart className="h-4 w-4 mr-2" />
-                  Get Started
+                  {t('nav.getStarted')}
                 </Button>
               </div>
             )}
@@ -177,7 +185,7 @@ export const Navigation: React.FC = () => {
                 }`}
               >
                 <ShoppingCart className="h-5 w-5 mb-1" />
-                <span>Buy</span>
+                <span>{t('nav.buy')}</span>
               </Link>
               <Link 
                 to="/sell" 
@@ -186,7 +194,7 @@ export const Navigation: React.FC = () => {
                 }`}
               >
                 <DollarSign className="h-5 w-5 mb-1" />
-                <span>Sell</span>
+                <span>{t('nav.sell')}</span>
               </Link>
               <Link 
                 to="/payments" 
@@ -195,14 +203,18 @@ export const Navigation: React.FC = () => {
                 }`}
               >
                 <DollarSign className="h-5 w-5 mb-1" />
-                <span>Payments</span>
+                <span>{t('nav.payments')}</span>
               </Link>
             </nav>
           </div>
         )}
       </header>
 
-      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      <AuthModal 
+        isOpen={showAuthModal} 
+        onClose={() => setShowAuthModal(false)}
+        defaultMode={authMode}
+      />
     </>
   );
 };
