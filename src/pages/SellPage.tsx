@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
-import { mockAPI, Product, formatCurrency } from '@/lib/mock-data';
+import { mockAPI, Product, formatCurrency, formatDate } from '@/lib/mock-data';
 import { useTranslation } from 'react-i18next';
 import { 
   DollarSign, 
@@ -103,10 +103,10 @@ export const SellPage: React.FC = () => {
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 flex items-center">
             <DollarSign className="mr-3 h-8 w-8 text-primary" />
-            Sell Products
+            {t('sell.title')}
           </h1>
           <p className="text-muted-foreground text-lg">
-            Manage your product listings and share your Seller ID with buyers
+            {t('sell.subtitle')}
           </p>
         </div>
 
@@ -118,7 +118,7 @@ export const SellPage: React.FC = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <User className="mr-2 h-5 w-5" />
-                  Your Seller ID
+                  {t('sell.yourSellerId')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -134,10 +134,10 @@ export const SellPage: React.FC = () => {
                     className="w-full"
                   >
                     <Copy className="mr-2 h-4 w-4" />
-                    Copy Seller ID
+                    {t('sell.copySellerID')}
                   </Button>
                   <p className="text-sm text-muted-foreground">
-                    Share this ID with buyers so they can find and purchase your products
+                    {t('sell.shareWithBuyers')}
                   </p>
                 </div>
               </CardContent>
@@ -148,7 +148,7 @@ export const SellPage: React.FC = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Plus className="mr-2 h-5 w-5" />
-                  Add New Product
+                  {t('sell.addNewProduct')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -158,17 +158,17 @@ export const SellPage: React.FC = () => {
                     className="w-full trust-gradient hover:opacity-90"
                   >
                     <Plus className="mr-2 h-4 w-4" />
-                    Add Product
+                    {t('sell.addProduct')}
                   </Button>
                 ) : (
                   <form onSubmit={handleAddProduct} className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="productName">Product Name</Label>
+                      <Label htmlFor="productName">{t('sell.productName')}</Label>
                       <div className="relative">
                         <Tag className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
                           id="productName"
-                          placeholder="iPhone 15 Pro"
+                          placeholder={t('sell.productNamePlaceholder')}
                           value={productName}
                           onChange={(e) => setProductName(e.target.value)}
                           className="pl-10"
@@ -178,13 +178,13 @@ export const SellPage: React.FC = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="productPrice">Price (SAR)</Label>
+                      <Label htmlFor="productPrice">{t('sell.priceInSAR')}</Label>
                       <div className="relative">
                         <DollarSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
                           id="productPrice"
                           type="number"
-                          placeholder="4500.00"
+                          placeholder={t('sell.pricePlaceholder')}
                           value={productPrice}
                           onChange={(e) => setProductPrice(e.target.value)}
                           className="pl-10"
@@ -196,10 +196,10 @@ export const SellPage: React.FC = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="productDescription">Description</Label>
+                      <Label htmlFor="productDescription">{t('sell.description')}</Label>
                       <Textarea
                         id="productDescription"
-                        placeholder="Describe your product..."
+                        placeholder={t('sell.descriptionPlaceholder')}
                         value={productDescription}
                         onChange={(e) => setProductDescription(e.target.value)}
                         rows={3}
@@ -214,7 +214,7 @@ export const SellPage: React.FC = () => {
                         disabled={loading}
                       >
                         {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        Add Product
+                        {t('sell.addProduct')}
                       </Button>
                       <Button 
                         type="button"
@@ -222,7 +222,7 @@ export const SellPage: React.FC = () => {
                         onClick={() => setShowAddForm(false)}
                         disabled={loading}
                       >
-                        Cancel
+                        {t('common.cancel')}
                       </Button>
                     </div>
                   </form>
@@ -238,7 +238,7 @@ export const SellPage: React.FC = () => {
                 <CardTitle className="flex items-center justify-between">
                   <div className="flex items-center">
                     <Package className="mr-2 h-5 w-5" />
-                    Your Products ({products.length})
+                    {t('sell.yourProducts')} ({products.length})
                   </div>
                 </CardTitle>
               </CardHeader>
@@ -247,14 +247,14 @@ export const SellPage: React.FC = () => {
                   <div className="text-center py-12">
                     <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <p className="text-muted-foreground mb-4">
-                      You haven't added any products yet
+                      {t('sell.noProducts')}
                     </p>
                     <Button 
                       onClick={() => setShowAddForm(true)}
                       variant="outline"
                     >
                       <Plus className="mr-2 h-4 w-4" />
-                      Add Your First Product
+                      {t('sell.addFirstProduct')}
                     </Button>
                   </div>
                 ) : (
@@ -274,11 +274,7 @@ export const SellPage: React.FC = () => {
                               {product.description}
                             </p>
                             <p className="text-sm text-muted-foreground">
-                              Added on {new Date(product.createdAt).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                              })}
+                              {t('sell.addedOn')} {formatDate(product.createdAt)}
                             </p>
                           </div>
                           <div className="ml-4">

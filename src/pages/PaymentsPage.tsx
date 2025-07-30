@@ -19,10 +19,12 @@ import {
   Loader2
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from 'react-i18next';
 
 export const PaymentsPage: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState<string | null>(null);
 
@@ -115,7 +117,7 @@ export const PaymentsPage: React.FC = () => {
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 flex items-center">
             <DollarSign className="mr-3 h-8 w-8 text-primary" />
-            Payments
+            {t('payments.title')}
           </h1>
           <p className="text-muted-foreground text-lg">
             Track your incoming and outgoing transactions
@@ -126,11 +128,11 @@ export const PaymentsPage: React.FC = () => {
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="incoming" className="flex items-center">
               <ArrowDownLeft className="mr-2 h-4 w-4" />
-              Incoming ({incomingTransactions.length})
+              {t('payments.incoming')} ({incomingTransactions.length})
             </TabsTrigger>
             <TabsTrigger value="outgoing" className="flex items-center">
               <ArrowUpRight className="mr-2 h-4 w-4" />
-              Outgoing ({outgoingTransactions.length})
+              {t('payments.outgoing')} ({outgoingTransactions.length})
             </TabsTrigger>
           </TabsList>
 
@@ -139,7 +141,7 @@ export const PaymentsPage: React.FC = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <ArrowDownLeft className="mr-2 h-5 w-5 text-success" />
-                  Incoming Payments (As Seller)
+                  {t('payments.incoming')} (As Seller)
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -211,7 +213,7 @@ export const PaymentsPage: React.FC = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <ArrowUpRight className="mr-2 h-5 w-5 text-destructive" />
-                  Outgoing Payments (As Buyer)
+                  {t('payments.outgoing')} (As Buyer)
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -270,7 +272,7 @@ export const PaymentsPage: React.FC = () => {
                                 >
                                   {loading === transaction.id && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                   <CheckCircle className="mr-2 h-4 w-4" />
-                                  Confirm Receipt
+                                  {t('payments.confirmReceipt')}
                                 </Button>
                                 <Button 
                                   onClick={() => handleFileComplaint(transaction.id)}
@@ -279,7 +281,7 @@ export const PaymentsPage: React.FC = () => {
                                 >
                                   {loading === transaction.id && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                   <AlertTriangle className="mr-2 h-4 w-4" />
-                                  File Complaint
+                                  {t('payments.fileComplaint')}
                                 </Button>
                               </div>
                             )}

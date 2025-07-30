@@ -352,16 +352,16 @@ const Dashboard: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card className="hover-lift">
             <CardHeader>
-              <CardTitle>Quick Buy</CardTitle>
+              <CardTitle>{t('dashboard.quickBuy')}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                Start a new transaction by entering seller and product details
+                {t('dashboard.quickBuyDescription')}
               </p>
               <Button asChild className="w-full">
                 <Link to="/buy">
                   <ArrowRight className="mr-2 h-4 w-4" />
-                  Go to Buy Page
+                  {t('dashboard.goToBuyPage')}
                 </Link>
               </Button>
             </CardContent>
@@ -369,16 +369,16 @@ const Dashboard: React.FC = () => {
 
           <Card className="hover-lift">
             <CardHeader>
-              <CardTitle>Manage Products</CardTitle>
+              <CardTitle>{t('dashboard.manageProducts')}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                Add new products or manage your existing listings
+                {t('dashboard.manageProductsDescription')}
               </p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/sell">
                   <ArrowRight className="mr-2 h-4 w-4" />
-                  Go to Sell Page
+                  {t('dashboard.goToSellPage')}
                 </Link>
               </Button>
             </CardContent>

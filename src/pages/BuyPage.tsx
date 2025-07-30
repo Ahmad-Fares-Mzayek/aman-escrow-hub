@@ -120,45 +120,45 @@ export const BuyPage: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Search Form */}
-          <Card className="hover-lift">
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Search className="mr-2 h-5 w-5" />
-                Product Search
-              </CardTitle>
-            </CardHeader>
+            <Card className="hover-lift">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Search className="mr-2 h-5 w-5" />
+                  {t('buy.productSearch')}
+                </CardTitle>
+              </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="sellerId">Seller ID</Label>
+                <Label htmlFor="sellerId">{t('buy.sellerId')}</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="sellerId"
-                    placeholder="e.g., SLR_001"
+                    placeholder={t('buy.sellerIdPlaceholder')}
                     value={sellerId}
                     onChange={(e) => setSellerId(e.target.value)}
                     className="pl-10"
                   />
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Get this from the seller you want to buy from
+                  {t('buy.sellerIdHelp')}
                 </p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="productId">Product ID</Label>
+                <Label htmlFor="productId">{t('buy.productId')}</Label>
                 <div className="relative">
                   <Package className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="productId"
-                    placeholder="e.g., PRD_001"
+                    placeholder={t('buy.productIdPlaceholder')}
                     value={productId}
                     onChange={(e) => setProductId(e.target.value)}
                     className="pl-10"
                   />
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  The specific product ID you want to purchase
+                  {t('buy.productIdHelp')}
                 </p>
               </div>
 
@@ -169,17 +169,17 @@ export const BuyPage: React.FC = () => {
               >
                 {searching && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 <Search className="mr-2 h-4 w-4" />
-                Search Product
+                {t('buy.searchProduct')}
               </Button>
 
               {/* Demo Data Helper */}
               <div className="bg-muted p-4 rounded-lg">
-                <h4 className="font-semibold text-sm mb-2">Demo Data:</h4>
+                <h4 className="font-semibold text-sm mb-2">{t('buy.demoData')}</h4>
                 <div className="text-sm space-y-1">
-                  <p><strong>Seller ID:</strong> SLR_001</p>
-                  <p><strong>Product IDs:</strong> PRD_001, PRD_002</p>
-                  <p><strong>Seller ID:</strong> SLR_002</p>
-                  <p><strong>Product ID:</strong> PRD_003</p>
+                  <p><strong>{t('buy.sellerId')}:</strong> SLR_001</p>
+                  <p><strong>{t('buy.productId')}s:</strong> PRD_001, PRD_002</p>
+                  <p><strong>{t('buy.sellerId')}:</strong> SLR_002</p>
+                  <p><strong>{t('buy.productId')}:</strong> PRD_003</p>
                 </div>
               </div>
             </CardContent>
@@ -190,7 +190,7 @@ export const BuyPage: React.FC = () => {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Package className="mr-2 h-5 w-5" />
-                Product Details
+                {t('buy.productDetails')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -198,31 +198,31 @@ export const BuyPage: React.FC = () => {
                 <div className="text-center py-12">
                   <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                   <p className="text-muted-foreground">
-                    Enter Seller ID and Product ID above to view product details
+                    {t('buy.noProductFound')}
                   </p>
                 </div>
               ) : (
                 <div className="space-y-6">
                   <div className="flex items-center text-success">
                     <CheckCircle className="h-5 w-5 mr-2" />
-                    <span className="font-medium">Product Found</span>
+                    <span className="font-medium">{t('buy.productFound')}</span>
                   </div>
 
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-sm font-medium text-muted-foreground">Seller</Label>
+                      <Label className="text-sm font-medium text-muted-foreground">{t('buy.seller')}</Label>
                       <p className="text-lg font-semibold">{productDetails.sellerName}</p>
                     </div>
 
                     <Separator />
 
                     <div>
-                      <Label className="text-sm font-medium text-muted-foreground">Product Name</Label>
+                      <Label className="text-sm font-medium text-muted-foreground">{t('buy.productName')}</Label>
                       <p className="text-lg font-semibold">{productDetails.productName}</p>
                     </div>
 
                     <div>
-                      <Label className="text-sm font-medium text-muted-foreground">Price</Label>
+                      <Label className="text-sm font-medium text-muted-foreground">{t('buy.price')}</Label>
                       <p className="text-2xl font-bold text-primary flex items-center">
                         <DollarSign className="h-6 w-6 mr-1" />
                         {formatCurrency(productDetails.productPrice)}
@@ -230,7 +230,7 @@ export const BuyPage: React.FC = () => {
                     </div>
 
                     <div>
-                      <Label className="text-sm font-medium text-muted-foreground">Description</Label>
+                      <Label className="text-sm font-medium text-muted-foreground">{t('buy.description')}</Label>
                       <p className="text-foreground/80 leading-relaxed">
                         {productDetails.productDescription}
                       </p>
@@ -247,14 +247,13 @@ export const BuyPage: React.FC = () => {
                   >
                     {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     <ShoppingCart className="mr-2 h-5 w-5" />
-                    Initiate Transaction
+                    {t('buy.initiateTransaction')}
                   </Button>
 
                   <div className="bg-success-light p-4 rounded-lg">
                     <p className="text-sm text-success-foreground">
-                      <strong>What happens next?</strong><br />
-                      The seller will be notified of your purchase request. 
-                      Once they confirm, you'll receive payment instructions to complete the transaction safely.
+                      <strong>{t('buy.whatHappensNext')}</strong><br />
+                      {t('buy.nextSteps')}
                     </p>
                   </div>
                 </div>
