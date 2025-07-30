@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
 import { mockAPI, formatCurrency } from '@/lib/mock-data';
+import { useTranslation } from 'react-i18next';
 import { 
   ShoppingCart, 
   Search, 
@@ -21,6 +22,7 @@ import { useToast } from '@/hooks/use-toast';
 export const BuyPage: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t, i18n } = useTranslation();
   const [sellerId, setSellerId] = useState('');
   const [productId, setProductId] = useState('');
   const [productDetails, setProductDetails] = useState<{
@@ -109,10 +111,10 @@ export const BuyPage: React.FC = () => {
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 flex items-center">
             <ShoppingCart className="mr-3 h-8 w-8 text-primary" />
-            Buy Products
+            {t('buy.title')}
           </h1>
           <p className="text-muted-foreground text-lg">
-            Enter seller and product details to start a secure transaction
+            {t('buy.subtitle')}
           </p>
         </div>
 

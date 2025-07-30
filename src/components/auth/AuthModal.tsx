@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 import { Shield, Mail, Lock, User, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from 'react-i18next';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -30,6 +31,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [name, setName] = useState('');
   const { signIn, signUp, loading } = useAuth();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,14 +40,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       if (mode === 'signin') {
         await signIn(email, password);
         toast({
-          title: "Welcome back!",
-          description: "You've successfully signed in.",
+          title: t('auth.welcomeBackToast'),
+          description: t('auth.signInSuccessToast'),
         });
       } else {
         await signUp({ name, email });
         toast({
-          title: "Account created!",
-          description: "Welcome to AMN. Let's get you started.",
+          title: t('auth.accountCreatedToast'),
+          description: t('auth.welcomeToast'),
         });
       }
       onClose();
@@ -55,8 +57,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       setName('');
     } catch (error) {
       toast({
-        title: "Authentication failed",
-        description: error instanceof Error ? error.message : "Please try again.",
+        title: t('auth.authFailedToast'),
+        description: error instanceof Error ? error.message : t('auth.tryAgainToast'),
         variant: "destructive",
       });
     }
@@ -81,12 +83,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </div>
           </div>
           <DialogTitle className="text-2xl font-bold">
-            {mode === 'signin' ? 'Welcome back' : 'Join AMN'}
+            {mode === 'signin' ? t('auth.welcomeBack') : t('auth.joinAMN')}
           </DialogTitle>
           <DialogDescription>
             {mode === 'signin' 
-              ? 'Sign in to your trusted intermediary account'
-              : 'Create your account to start secure transactions'
+              ? t('auth.signInDescription')
+              : t('auth.signUpDescription')
             }
           </DialogDescription>
         </DialogHeader>
@@ -94,7 +96,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         <form onSubmit={handleSubmit} className="space-y-4 mt-6">
           {mode === 'signup' && (
             <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
+              <Label htmlFor="name">{t('auth.fullName')}</Label>
               <div className="relative">
                 <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -111,7 +113,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t('auth.email')}</Label>
             <div className="relative">
               <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
@@ -127,7 +129,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">{t('auth.password')}</Label>
             <div className="relative">
               <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
@@ -144,7 +146,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
           {mode === 'signin' && (
             <div className="text-sm text-muted-foreground">
-              Demo credentials: ahmed@example.com / password
+              {t('auth.demoCredentials')}
             </div>
           )}
 
@@ -154,7 +156,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             disabled={loading}
           >
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {mode === 'signin' ? 'Sign In' : 'Create Account'}
+            {mode === 'signin' ? t('auth.signIn') : t('auth.createAccount')}
           </Button>
 
           <div className="text-center">
@@ -164,8 +166,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               className="text-sm text-primary hover:underline"
             >
               {mode === 'signin' 
-                ? "Don't have an account? Sign up" 
-                : "Already have an account? Sign in"
+                ? t('auth.noAccount')
+                : t('auth.haveAccount')
               }
             </button>
           </div>

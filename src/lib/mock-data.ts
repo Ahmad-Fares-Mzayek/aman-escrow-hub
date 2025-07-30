@@ -295,21 +295,47 @@ export const mockAPI = {
 };
 
 // Formatting utilities
-export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('ar-SA', {
-    style: 'currency',
-    currency: 'SAR'
-  }).format(amount);
+export const formatCurrency = (amount: number, language: string = 'en'): string => {
+  if (language === 'ar') {
+    return new Intl.NumberFormat('ar-SA', {
+      style: 'currency',
+      currency: 'SAR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  } else {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'SAR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+      currencyDisplay: 'code'
+    }).format(amount).replace('SAR', 'SAR');
+  }
 };
 
-export const formatNumber = (num: number): string => {
-  return new Intl.NumberFormat('ar-SA').format(num);
+export const formatNumber = (num: number, language: string = 'en'): string => {
+  if (language === 'ar') {
+    // Use Eastern Arabic numerals
+    return new Intl.NumberFormat('ar-EG').format(num);
+  } else {
+    // Use Western Arabic numerals
+    return new Intl.NumberFormat('en-US').format(num);
+  }
 };
 
-export const formatDate = (dateString: string): string => {
-  return new Intl.DateTimeFormat('ar-SA', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }).format(new Date(dateString));
+export const formatDate = (dateString: string, language: string = 'en'): string => {
+  if (language === 'ar') {
+    return new Intl.DateTimeFormat('ar-SA', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }).format(new Date(dateString));
+  } else {
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }).format(new Date(dateString));
+  }
 };

@@ -9,6 +9,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 import { 
   Shield, 
   LayoutDashboard, 
@@ -29,48 +30,48 @@ interface TutorialStep {
   content: string;
 }
 
-const tutorialSteps: TutorialStep[] = [
+const getTutorialSteps = (t: any): TutorialStep[] => [
   {
     id: 1,
-    title: "Welcome to AMN | أمن",
-    description: "Your secure middleman for individual transactions",
+    title: t('tutorial.step1.title'),
+    description: t('tutorial.step1.description'),
     icon: <Shield className="h-12 w-12 text-primary" />,
-    content: "Welcome to AMN | أمن — your secure middleman for individual transactions. Let's take a quick tour to help you get started with safe buying and selling."
+    content: t('tutorial.step1.content')
   },
   {
     id: 2,
-    title: "Dashboard Overview",
-    description: "Your control center for transactions",
+    title: t('tutorial.step2.title'),
+    description: t('tutorial.step2.description'),
     icon: <LayoutDashboard className="h-12 w-12 text-primary" />,
-    content: "This is your control center. View your spending, earnings, and transaction activity right here. You can see your total spent, total received, and your unique Seller ID."
+    content: t('tutorial.step2.content')
   },
   {
     id: 3,
-    title: "How to Buy",
-    description: "Initiating secure purchases",
+    title: t('tutorial.step3.title'),
+    description: t('tutorial.step3.description'),
     icon: <ShoppingCart className="h-12 w-12 text-primary" />,
-    content: "Initiate a transaction by entering a Seller ID and Product ID. We'll pull the details for you, including seller name, product information, and price. Once you confirm, the seller will be notified."
+    content: t('tutorial.step3.content')
   },
   {
     id: 4,
-    title: "How to Sell",
-    description: "Managing your products",
+    title: t('tutorial.step4.title'),
+    description: t('tutorial.step4.description'),
     icon: <DollarSign className="h-12 w-12 text-primary" />,
-    content: "Manage your product list here. Add new items with names, prices, and descriptions. Each product gets a unique ID that buyers can use to find your items easily using your Seller ID."
+    content: t('tutorial.step4.content')
   },
   {
     id: 5,
-    title: "Payments & Confirmations",
-    description: "Tracking transaction progress",
+    title: t('tutorial.step5.title'),
+    description: t('tutorial.step5.description'),
     icon: <CreditCard className="h-12 w-12 text-primary" />,
-    content: "Track every payment in the Payments section. As a buyer, confirm receipt to release funds to the seller. As a seller, get paid once the buyer approves. You can also file complaints if needed."
+    content: t('tutorial.step5.content')
   },
   {
     id: 6,
-    title: "Profile & Settings",
-    description: "Managing your account",
+    title: t('tutorial.step6.title'),
+    description: t('tutorial.step6.description'),
     icon: <User className="h-12 w-12 text-primary" />,
-    content: "Access settings, log out, or replay this tutorial anytime by clicking your profile avatar. Your Seller ID is always displayed here for easy sharing with buyers."
+    content: t('tutorial.step6.content')
   }
 ];
 
@@ -88,9 +89,12 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({
   const [currentStep, setCurrentStep] = useState(1);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const { user } = useAuth();
-
+  const { t, i18n } = useTranslation();
+  
+  const tutorialSteps = getTutorialSteps(t);
   const currentStepData = tutorialSteps.find(step => step.id === currentStep);
   const progress = (currentStep / tutorialSteps.length) * 100;
+  const isRTL = i18n.language === 'ar';
 
   const handleNext = () => {
     if (currentStep < tutorialSteps.length) {
@@ -138,7 +142,7 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({
           <DialogHeader>
             <div className="flex items-center justify-between mb-4">
               <div className="text-sm text-muted-foreground">
-                Step {currentStep} of {tutorialSteps.length}
+                {t('tutorial.step')} {currentStep} {t('tutorial.of')} {tutorialSteps.length}
               </div>
               <Button 
                 variant="ghost" 
@@ -146,7 +150,7 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({
                 onClick={handleSkip}
                 className="text-muted-foreground hover:text-foreground"
               >
-                Skip Tutorial
+                {t('tutorial.skip')}
               </Button>
             </div>
             
@@ -175,9 +179,11 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({
               variant="outline" 
               onClick={handlePrevious}
               disabled={currentStep === 1}
+              className={isRTL ? 'flex-row-reverse' : ''}
             >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Previous
+              {!isRTL && <ArrowLeft className="mr-2 h-4 w-4" />}
+              {t('tutorial.previous')}
+              {isRTL && <ArrowLeft className="ml-2 h-4 w-4" />}
             </Button>
 
             <div className="flex space-x-2">
@@ -193,10 +199,11 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({
 
             <Button 
               onClick={handleNext}
-              className="trust-gradient hover:opacity-90"
+              className={`trust-gradient hover:opacity-90 ${isRTL ? 'flex-row-reverse' : ''}`}
             >
-              {currentStep === tutorialSteps.length ? 'Complete' : 'Next'}
-              <ArrowRight className="ml-2 h-4 w-4" />
+              {!isRTL && <ArrowRight className="ml-2 h-4 w-4" />}
+              {currentStep === tutorialSteps.length ? t('tutorial.complete') : t('tutorial.next')}
+              {isRTL && <ArrowRight className="mr-2 h-4 w-4" />}
             </Button>
           </div>
         </DialogContent>
@@ -208,10 +215,10 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <X className="mr-2 h-5 w-5" />
-              Exit Tutorial?
+              {t('tutorial.exit')}
             </DialogTitle>
             <DialogDescription>
-              You're on step {currentStep} of {tutorialSteps.length}. What would you like to do?
+              {t('tutorial.exitMessage', { step: currentStep, total: tutorialSteps.length })}
             </DialogDescription>
           </DialogHeader>
           
@@ -221,20 +228,20 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({
               variant="outline" 
               className="w-full"
             >
-              Resume Later
+              {t('tutorial.resumeLater')}
             </Button>
             <Button 
               onClick={handleExit}
               variant="destructive" 
               className="w-full"
             >
-              Skip Tutorial
+              {t('tutorial.skip')}
             </Button>
             <Button 
               onClick={() => setShowExitConfirm(false)}
               className="w-full"
             >
-              Continue Tutorial
+              {t('tutorial.continueTutorial')}
             </Button>
           </div>
         </DialogContent>
@@ -251,10 +258,10 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({
                 </div>
               </div>
               <DialogTitle className="text-2xl font-bold">
-                You're All Set!
+                {t('tutorial.youreAllSet')}
               </DialogTitle>
               <DialogDescription>
-                That's it! You're ready to securely buy and sell with AMN. Let's get started.
+                {t('tutorial.completionMessage')}
               </DialogDescription>
             </DialogHeader>
 
@@ -263,13 +270,13 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({
                 onClick={handleComplete}
                 className="flex-1 trust-gradient hover:opacity-90"
               >
-                Go to Dashboard
+                {t('tutorial.goToDashboard')}
               </Button>
               <Button 
                 onClick={() => setCurrentStep(1)}
                 variant="outline"
               >
-                Replay Tutorial
+                {t('tutorial.replayTutorial')}
               </Button>
             </div>
           </DialogContent>

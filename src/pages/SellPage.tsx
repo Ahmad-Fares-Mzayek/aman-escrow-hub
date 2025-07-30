@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { mockAPI, Product, formatCurrency } from '@/lib/mock-data';
+import { useTranslation } from 'react-i18next';
 import { 
   DollarSign, 
   Plus, 
@@ -24,6 +25,7 @@ import { useToast } from '@/hooks/use-toast';
 export const SellPage: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t, i18n } = useTranslation();
   const [products, setProducts] = useState<Product[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [loading, setLoading] = useState(false);
