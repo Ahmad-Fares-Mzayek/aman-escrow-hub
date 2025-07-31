@@ -14,7 +14,98 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      anomaly_flags: {
+        Row: {
+          anomaly_score: number
+          created_at: string
+          detection_method: string
+          features_analyzed: Json | null
+          id: string
+          is_anomaly: boolean
+          reviewed: boolean
+          reviewed_at: string | null
+          reviewer_comments: string | null
+          reviewer_id: string | null
+          transaction_id: string
+        }
+        Insert: {
+          anomaly_score: number
+          created_at?: string
+          detection_method?: string
+          features_analyzed?: Json | null
+          id?: string
+          is_anomaly?: boolean
+          reviewed?: boolean
+          reviewed_at?: string | null
+          reviewer_comments?: string | null
+          reviewer_id?: string | null
+          transaction_id: string
+        }
+        Update: {
+          anomaly_score?: number
+          created_at?: string
+          detection_method?: string
+          features_analyzed?: Json | null
+          id?: string
+          is_anomaly?: boolean
+          reviewed?: boolean
+          reviewed_at?: string | null
+          reviewer_comments?: string | null
+          reviewer_id?: string | null
+          transaction_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "anomaly_flags_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          id: string
+          ip_address: unknown | null
+          metadata: Json | null
+          status: string
+          transaction_type: string
+          updated_at: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          status?: string
+          transaction_type: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          status?: string
+          transaction_type?: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
