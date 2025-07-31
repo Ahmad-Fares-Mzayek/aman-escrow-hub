@@ -7,6 +7,9 @@ import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
 import { mockAPI, formatCurrency } from '@/lib/mock-data';
 import { useTranslation } from 'react-i18next';
+import { useAnomalyDetection } from '@/hooks/useAnomalyDetection';
+import { AnomalyAlert } from '@/components/AnomalyAlert';
+import { useNavigate } from 'react-router-dom';
 import { 
   ShoppingCart, 
   Search, 
@@ -23,6 +26,8 @@ export const BuyPage: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const { detectAnomaly, isAnalyzing, lastAnomalyResult, clearLastResult } = useAnomalyDetection();
   const [sellerId, setSellerId] = useState('');
   const [productId, setProductId] = useState('');
   const [productDetails, setProductDetails] = useState<{
@@ -79,8 +84,21 @@ export const BuyPage: React.FC = () => {
 
     setLoading(true);
     
-    // Simulate transaction creation
-    setTimeout(() => {
+    try {
+      // First run anomaly detection
+      const anomalyResult = await detectAnomaly({
+        amount: productDetails.productPrice,
+        currency: 'SAR',
+        user_id: user.id,
+        transaction_type: 'escrow_deposit',
+        metadata: {
+          seller_id: sellerId,
+          product_id: productId,
+          product_name: productDetails.productName
+        }
+      });
+
+      // Create the transaction in mock data
       const transaction = mockAPI.createTransaction({
         buyerId: user.id,
         sellerId: sellerId,
@@ -93,16 +111,27 @@ export const BuyPage: React.FC = () => {
       });
 
       toast({
-        title: "Transaction initiated!",
-        description: `Transaction ${transaction.id} has been created. The seller has been notified.`,
+        title: t('buy.transactionInitiated'),
+        description: t('buy.transactionCreated', { id: transaction.id.slice(0, 8) }),
       });
 
-      // Reset form
-      setSellerId('');
-      setProductId('');
-      setProductDetails(null);
+      // Don't reset form if anomaly detected (let user see the alert)
+      if (!anomalyResult?.is_anomaly) {
+        setSellerId('');
+        setProductId('');
+        setProductDetails(null);
+      }
+      
+    } catch (error) {
+      console.error('Transaction creation failed:', error);
+      toast({
+        title: "Transaction Failed",
+        description: "Failed to create transaction. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
   };
 
   return (
@@ -117,6 +146,16 @@ export const BuyPage: React.FC = () => {
             {t('buy.subtitle')}
           </p>
         </div>
+
+        {/* Anomaly Alert */}
+        {lastAnomalyResult && (
+          <AnomalyAlert
+            isVisible={lastAnomalyResult.is_anomaly}
+            anomalyScore={lastAnomalyResult.score}
+            transactionId={lastAnomalyResult.transaction_id}
+            onViewDetails={() => navigate('/fraud-dashboard')}
+          />
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Search Form */}

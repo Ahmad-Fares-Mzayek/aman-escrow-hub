@@ -1,1 +1,4 @@
 project_id = "uvqueevweckuyeepxfsf"
+
+[functions.detect-anomaly]
+verify_jwt = false

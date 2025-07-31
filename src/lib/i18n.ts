@@ -235,7 +235,16 @@ const resources = {
       "common.yesterday": "Yesterday",
       "common.thisWeek": "This Week",
       "common.thisMonth": "This Month",
-      "common.lastMonth": "Last Month"
+      "common.lastMonth": "Last Month",
+
+      // Anomaly Detection
+      "anomaly.detected": "Fraud Alert",
+      "anomaly.score": "Risk Score",
+      "anomaly.transactionId": "Transaction ID",
+      "anomaly.severity.high": "High Risk",
+      "anomaly.severity.medium": "Medium Risk", 
+      "anomaly.severity.low": "Low Risk",
+      "anomaly.viewDetails": "View Details"
     }
   },
   ar: {
@@ -431,7 +440,16 @@ const resources = {
       "common.yesterday": "أمس",
       "common.thisWeek": "هذا الأسبوع",
       "common.thisMonth": "هذا الشهر",
-      "common.lastMonth": "الشهر الماضي"
+      "common.lastMonth": "الشهر الماضي",
+
+      // Anomaly Detection - Arabic
+      "anomaly.detected": "تنبيه احتيال",
+      "anomaly.score": "نقاط الخطر",
+      "anomaly.transactionId": "معرف المعاملة",
+      "anomaly.severity.high": "خطر عالي",
+      "anomaly.severity.medium": "خطر متوسط", 
+      "anomaly.severity.low": "خطر منخفض",
+      "anomaly.viewDetails": "عرض التفاصيل"
     }
   }
 };
