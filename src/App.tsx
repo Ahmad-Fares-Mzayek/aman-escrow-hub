@@ -10,6 +10,7 @@ import { HomePage } from "@/pages/HomePage";
 import { BuyPage } from "@/pages/BuyPage";
 import { SellPage } from "@/pages/SellPage";
 import { PaymentsPage } from "@/pages/PaymentsPage";
+import { ComplaintPage } from "@/pages/ComplaintPage";
 import { TutorialPage } from "@/pages/TutorialPage";
 import { LearnMorePage } from "@/pages/LearnMorePage";
 import FraudDashboard from "@/pages/FraudDashboard";
@@ -33,6 +34,7 @@ const App = () => (
                 <Route path="/buy" element={<BuyPage />} />
                 <Route path="/sell" element={<SellPage />} />
                 <Route path="/payments" element={<PaymentsPage />} />
+                <Route path="/file-complaint" element={<ComplaintPage />} />
                 <Route path="/tutorial" element={<TutorialPage />} />
                 <Route path="/learn-more" element={<LearnMorePage />} />
                 <Route path="/fraud-dashboard" element={<FraudDashboard />} />

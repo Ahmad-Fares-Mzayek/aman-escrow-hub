@@ -20,11 +20,13 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 export const PaymentsPage: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState<string | null>(null);
 
@@ -54,24 +56,8 @@ export const PaymentsPage: React.FC = () => {
     }, 2000);
   };
 
-  const handleFileComplaint = async (transactionId: string) => {
-    setLoading(transactionId);
-    
-    // Simulate API delay
-    setTimeout(() => {
-      const updatedTransaction = mockAPI.updateTransactionStatus(transactionId, 'disputed');
-      if (updatedTransaction) {
-        setTransactions(prev => 
-          prev.map(t => t.id === transactionId ? updatedTransaction : t)
-        );
-        toast({
-          title: "Complaint filed",
-          description: "Our team will review this transaction. The seller has been notified.",
-          variant: "destructive",
-        });
-      }
-      setLoading(null);
-    }, 2000);
+  const handleFileComplaint = (transactionId: string) => {
+    navigate(`/file-complaint?orderId=${transactionId}`);
   };
 
   const getStatusIcon = (status: Transaction['status']) => {
